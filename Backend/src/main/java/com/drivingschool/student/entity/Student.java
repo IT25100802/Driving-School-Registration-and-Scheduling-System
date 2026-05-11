@@ -18,9 +18,12 @@ public class Student extends Person {
     private String nic;
     private String dateOfBirth;
     private String address;
-    @Enumerated(EnumType.STRING)
-    private LicenseCategory licenseCategory;
+    private String licenseCategory;
     private String enrolledDate;
     private String status;
+
+    @Enumerated(EnumType.STRING)
+    private TrainingPhase trainingPhase;
+    private String packageId;
 }
 
