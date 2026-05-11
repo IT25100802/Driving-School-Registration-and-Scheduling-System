@@ -21,4 +21,10 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable String id) {
+        StudentDTO student = studentService.getStudentById(id);
+        return student != null ? ResponseEntity.ok(student) : ResponseEntity.notFound().build();
+    }
+
 }
