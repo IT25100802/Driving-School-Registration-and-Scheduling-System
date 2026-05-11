@@ -18,8 +18,7 @@ public class Vehicle {
     private String make;
     private String model;
     private int year;
-    @Enumerated(EnumType.STRING)
-    private VehicleType vehicleType;
+    private String vehicleType;
     private String assignedCategory;
     private String status;
     private String lastServiceDate;
