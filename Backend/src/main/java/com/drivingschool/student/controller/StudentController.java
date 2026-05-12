@@ -38,4 +38,9 @@ public class StudentController {
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable String id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
+    }
 }
