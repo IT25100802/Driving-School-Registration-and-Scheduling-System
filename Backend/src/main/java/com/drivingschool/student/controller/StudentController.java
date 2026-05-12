@@ -27,4 +27,10 @@ public class StudentController {
         return student != null ? ResponseEntity.ok(student) : ResponseEntity.notFound().build();
     }
 
+    @PostMapping
+    public StudentDTO createStudent(@RequestBody StudentDTO studentDTO) {
+        return studentService.createStudent(studentDTO);
+    }
+
+   
 }
