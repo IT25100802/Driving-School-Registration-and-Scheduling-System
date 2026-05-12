@@ -33,8 +33,7 @@ public class InstructorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InstructorDTO> updateInstructor(@PathVariable String id,
-            @RequestBody InstructorDTO instructorDTO) {
+    public ResponseEntity<InstructorDTO> updateInstructor(@PathVariable String id, @RequestBody InstructorDTO instructorDTO) {
         InstructorDTO updated = instructorService.updateInstructor(id, instructorDTO);
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
@@ -43,17 +42,5 @@ public class InstructorController {
     public ResponseEntity<Void> deleteInstructor(@PathVariable String id) {
         instructorService.deleteInstructor(id);
         return ResponseEntity.ok().build();
-    }
-
-    // ✨ NEW: Search instructors by name or specialization
-    @GetMapping("/search")
-    public List<InstructorDTO> searchInstructors(@RequestParam String keyword) {
-        return instructorService.searchInstructors(keyword);
-    }
-
-    // ✨ NEW: Get only ACTIVE instructors
-    @GetMapping("/active")
-    public List<InstructorDTO> getActiveInstructors() {
-        return instructorService.getActiveInstructors();
     }
 }
