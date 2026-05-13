@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum VehicleType {
-    
     CAR("Car"),
     MOTORCYCLE("Motorcycle"),
     VAN("Van"),
