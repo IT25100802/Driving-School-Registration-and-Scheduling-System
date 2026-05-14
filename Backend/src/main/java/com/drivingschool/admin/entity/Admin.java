@@ -16,6 +16,8 @@ public class Admin {
     private String username;
     private String password;
     private String fullName;
+    private String email;
+    private String phone;
     @Enumerated(EnumType.STRING)
     private AdminRole role;
 
