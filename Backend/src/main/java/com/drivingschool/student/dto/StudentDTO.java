@@ -10,5 +10,10 @@ public class StudentDTO {
     private String fullName;
     private String email;
     private String phone;
-   
+    private String nic;
+    private String dateOfBirth;
+    private String address;
+    private String licenseCategory;
+    private String enrolledDate;
+  
 }
