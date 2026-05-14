@@ -14,11 +14,13 @@ import lombok.NoArgsConstructor;
 @MappedSuperclass
 public class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String fullName;
     private String email;
     private String phone;
+    private String password;
+    private String username;
+    private String role;
 }
 
 
