@@ -29,7 +29,7 @@ public class VehicleService {
 
     public VehicleDTO createVehicle(VehicleDTO vehicleDTO) {
         Vehicle vehicle = convertToEntity(vehicleDTO);
-        if (vehicle.getStatus() == null || vehicle.getStatus().isEmpty()) {
+        if (vehicle.getStatus() == null || vehicle.getStatus().trim().isEmpty()) {
             vehicle.setStatus("AVAILABLE");
         }
         return convertToDTO(vehicleRepository.save(vehicle));
@@ -64,14 +64,16 @@ public class VehicleService {
 
     private Vehicle convertToEntity(VehicleDTO dto) {
         Vehicle vehicle = new Vehicle();
-        vehicle.setId(dto.getId());
+        if (dto.getId() != null && !dto.getId().trim().isEmpty()) {
+            vehicle.setId(dto.getId());
+        }
         vehicle.setRegistrationNumber(dto.getRegistrationNumber());
         vehicle.setMake(dto.getMake());
         vehicle.setModel(dto.getModel());
         vehicle.setYear(dto.getYear());
         vehicle.setVehicleType(dto.getVehicleType());
         vehicle.setAssignedCategory(dto.getAssignedCategory());
-        vehicle.setStatus(dto.getStatus());
+        vehicle.setStatus(dto.getStatus() != null && !dto.getStatus().trim().isEmpty() ? dto.getStatus() : "AVAILABLE");
         vehicle.setLastServiceDate(dto.getLastServiceDate());
         return vehicle;
     }
