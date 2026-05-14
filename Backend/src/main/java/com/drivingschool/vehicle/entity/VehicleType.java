@@ -1,6 +1,7 @@
 package com.drivingschool.vehicle.entity;
 
 import lombok.Getter;
+//Veicle types add 
 
 @Getter
 public enum VehicleType {
