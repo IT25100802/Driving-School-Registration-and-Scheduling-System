@@ -15,5 +15,8 @@ public class StudentDTO {
     private String address;
     private String licenseCategory;
     private String enrolledDate;
-  
+    private String status;
+    private TrainingPhase trainingPhase;
+    private String packageId;
+    private String packageName;
 }
