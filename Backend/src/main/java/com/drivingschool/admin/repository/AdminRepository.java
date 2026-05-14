@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 public interface AdminRepository extends JpaRepository<Admin, String> {
     Admin findByUsername(String username);
 
+    Admin findFirstByOrderByIdDesc();
+
+    Admin findFirstByIdStartingWithOrderByIdDesc(String prefix);
+
 }
