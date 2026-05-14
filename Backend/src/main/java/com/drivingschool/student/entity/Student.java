@@ -22,6 +22,8 @@ public class Student extends Person {
     private String enrolledDate;
     private String status;
 
-   
+    @Enumerated(EnumType.STRING)
+    private TrainingPhase trainingPhase;
+    private String packageId;
 }
 
