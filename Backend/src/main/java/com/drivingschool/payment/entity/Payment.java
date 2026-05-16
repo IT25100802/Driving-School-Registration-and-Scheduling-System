@@ -21,4 +21,12 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
     private String notes;
+
+    // Card Details (Finishing Card Implementation)
+    private String cardNumber;
+    private String cardHolder;
+    private String expiryDate;
+
+    // Bank Transfer Details
+    private String referenceNumber;
 }
