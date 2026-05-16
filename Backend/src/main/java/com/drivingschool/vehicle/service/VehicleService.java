@@ -28,7 +28,22 @@ public class VehicleService {
     }
 
     public VehicleDTO createVehicle(VehicleDTO vehicleDTO) {
+        Vehicle lastVehicle = vehicleRepository.findLastManualId();
+        String nextId = "V0001";
+        if (lastVehicle != null && lastVehicle.getId() != null) {
+            try {
+                String numericPart = lastVehicle.getId().replaceAll("\\D", "");
+                if (!numericPart.isEmpty()) {
+                    int lastNum = Integer.parseInt(numericPart);
+                    nextId = String.format("V%04d", lastNum + 1);
+                }
+            } catch (Exception e) {
+                // Fallback to V0001
+            }
+        }
+
         Vehicle vehicle = convertToEntity(vehicleDTO);
+        vehicle.setId(nextId);
         if (vehicle.getStatus() == null || vehicle.getStatus().trim().isEmpty()) {
             vehicle.setStatus("AVAILABLE");
         }
@@ -36,11 +51,19 @@ public class VehicleService {
     }
 
     public VehicleDTO updateVehicle(String id, VehicleDTO vehicleDTO) {
-        if (!vehicleRepository.existsById(id)) return null;
-        
-        Vehicle updated = convertToEntity(vehicleDTO);
-        updated.setId(id);
-        return convertToDTO(vehicleRepository.save(updated));
+        return vehicleRepository.findById(id)
+                .map(existing -> {
+                    if (vehicleDTO.getRegistrationNumber() != null) existing.setRegistrationNumber(vehicleDTO.getRegistrationNumber());
+                    if (vehicleDTO.getMake() != null) existing.setMake(vehicleDTO.getMake());
+                    if (vehicleDTO.getModel() != null) existing.setModel(vehicleDTO.getModel());
+                    if (vehicleDTO.getYear() > 0) existing.setYear(vehicleDTO.getYear());
+                    if (vehicleDTO.getVehicleType() != null) existing.setVehicleType(vehicleDTO.getVehicleType());
+                    if (vehicleDTO.getAssignedCategory() != null) existing.setAssignedCategory(vehicleDTO.getAssignedCategory());
+                    if (vehicleDTO.getStatus() != null) existing.setStatus(vehicleDTO.getStatus());
+                    
+                    return convertToDTO(vehicleRepository.save(existing));
+                })
+                .orElse(null);
     }
 
     public void deleteVehicle(String id) {
@@ -58,7 +81,6 @@ public class VehicleService {
         dto.setVehicleType(vehicle.getVehicleType());
         dto.setAssignedCategory(vehicle.getAssignedCategory());
         dto.setStatus(vehicle.getStatus());
-        dto.setLastServiceDate(vehicle.getLastServiceDate());
         return dto;
     }
 
@@ -74,7 +96,6 @@ public class VehicleService {
         vehicle.setVehicleType(dto.getVehicleType());
         vehicle.setAssignedCategory(dto.getAssignedCategory());
         vehicle.setStatus(dto.getStatus() != null && !dto.getStatus().trim().isEmpty() ? dto.getStatus() : "AVAILABLE");
-        vehicle.setLastServiceDate(dto.getLastServiceDate());
         return vehicle;
     }
 }
