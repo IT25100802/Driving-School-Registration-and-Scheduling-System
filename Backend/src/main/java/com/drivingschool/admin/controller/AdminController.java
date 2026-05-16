@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admins")
 @CrossOrigin(origins = "*")
-
 public class AdminController {
 
     @Autowired
@@ -44,5 +43,4 @@ public class AdminController {
         adminService.deleteAdmin(id);
         return ResponseEntity.ok().build();
     }
-
 }
