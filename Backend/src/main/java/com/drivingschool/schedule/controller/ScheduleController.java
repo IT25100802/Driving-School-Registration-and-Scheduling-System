@@ -35,17 +35,17 @@ public class ScheduleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ScheduleDTO> updateSchedule(@PathVariable String id, @RequestBody ScheduleDTO scheduleDTO) {
-        ScheduleDTO updated = scheduleService.updateSchedule(id,scheduleDTO);
+        ScheduleDTO updated = scheduleService.updateSchedule(id, scheduleDTO);
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/today")
-    public List<ScheduleDTO> getTodaySchedules(){
+    public List<ScheduleDTO> getTodaySchedules() {
         return scheduleService.getTodaySchedules();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@pathVariable String id){
+    public ResponseEntity<Void> deleteSchedule(@PathVariable String id) {
         scheduleService.deleteSchedule(id);
         return ResponseEntity.ok().build();
     }
