@@ -28,7 +28,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
-
 public class AuthController {
 
     @Autowired
@@ -45,6 +44,9 @@ public class AuthController {
 
     @Autowired
     private AdminRepository adminRepository;
+
+    @Autowired
+    private com.drivingschool.admin.service.AdminService adminService;
 
     @Autowired
     private com.drivingschool.student.service.StudentService studentService;
@@ -133,12 +135,13 @@ public class AuthController {
             instructorService.createInstructor(instructorDTO);
             return ResponseEntity.ok("Instructor registered successfully");
         } else if ("ADMIN".equalsIgnoreCase(role)) {
-            Admin admin = new Admin();
-            admin.setUsername(email);
-            admin.setPassword(encodedPassword);
-            admin.setFullName(fullName);
-            admin.setRole(AdminRole.ADMIN);
-            adminRepository.save(admin);
+            com.drivingschool.admin.dto.AdminDTO adminDTO = new com.drivingschool.admin.dto.AdminDTO();
+            adminDTO.setUsername(email);
+            adminDTO.setPassword(password); // Service handles encoding
+            adminDTO.setFullName(fullName);
+            adminDTO.setEmail(email);
+            adminDTO.setRole(AdminRole.ADMIN);
+            adminService.createAdmin(adminDTO);
             return ResponseEntity.ok("Admin registered successfully");
         }
 
@@ -149,5 +152,4 @@ public class AuthController {
     public ResponseEntity<Void> logout() {
         return ResponseEntity.ok().build();
     }
-
 }
