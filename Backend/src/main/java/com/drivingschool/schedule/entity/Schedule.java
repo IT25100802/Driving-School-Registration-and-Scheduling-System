@@ -1,4 +1,5 @@
 package com.drivingschool.schedule.entity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ public class Schedule {
     private String studentId;
     private String instructorId;
     private String vehicleId;
-    private String sheduleDate;
+    private String scheduleDate;
     private String startTime;
     private String endTime;
     @Enumerated(EnumType.STRING)
