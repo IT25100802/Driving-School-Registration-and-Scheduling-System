@@ -11,5 +11,4 @@ public interface AdminRepository extends JpaRepository<Admin, String> {
     Admin findFirstByOrderByIdDesc();
 
     Admin findFirstByIdStartingWithOrderByIdDesc(String prefix);
-
 }
