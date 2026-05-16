@@ -1,5 +1,6 @@
 package com.drivingschool.vehicle.entity;
 
+import com.drivingschool.payment.entity.LicenseCategory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,16 +12,19 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Vehicle {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String registrationNumber;
     private String make;
     private String model;
     private int year;
-    private String vehicleType;
-    private String assignedCategory;
+
+    @Enumerated(EnumType.STRING)
+    private VehicleType vehicleType;
+
+    @Enumerated(EnumType.STRING)
+    private LicenseCategory assignedCategory;
+    
     private String status;
-    private String lastServiceDate;
 }
 
