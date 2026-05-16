@@ -3,6 +3,7 @@ package com.drivingschool.schedule.dto;
 import com.drivingschool.schedule.entity.ScheduleType;
 import lombok.Data;
 
+@Data
 public class ScheduleDTO {
     private String id;
     private String studentId;
