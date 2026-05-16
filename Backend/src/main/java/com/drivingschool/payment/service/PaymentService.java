@@ -3,7 +3,6 @@ package com.drivingschool.payment.service;
 import com.drivingschool.payment.dto.PaymentDTO;
 import com.drivingschool.payment.entity.Payment;
 import com.drivingschool.payment.entity.PaymentStatus;
-import com.drivingschool.payment.repository.PackageRepository;
 import com.drivingschool.payment.repository.PaymentRepository;
 import com.drivingschool.student.entity.Student;
 import com.drivingschool.student.repository.StudentRepository;
