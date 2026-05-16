@@ -1,6 +1,7 @@
 package com.drivingschool.student.entity;
 
 import com.drivingschool.common.entity.Person;
+import com.drivingschool.payment.entity.LicenseCategory;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +19,8 @@ public class Student extends Person {
     private String nic;
     private String dateOfBirth;
     private String address;
-    private String licenseCategory;
+    @Enumerated(EnumType.STRING)
+    private LicenseCategory licenseCategory;
     private String enrolledDate;
     private String status;
 
