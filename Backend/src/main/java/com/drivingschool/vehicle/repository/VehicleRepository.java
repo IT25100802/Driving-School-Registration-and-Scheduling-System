@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, String> {
-    
+    @org.springframework.data.jpa.repository.Query(value = "SELECT * FROM vehicle WHERE id LIKE 'V%' ORDER BY CAST(SUBSTRING(id, 2) AS UNSIGNED) DESC LIMIT 1", nativeQuery = true)
+    Vehicle findLastManualId();
 }
 
