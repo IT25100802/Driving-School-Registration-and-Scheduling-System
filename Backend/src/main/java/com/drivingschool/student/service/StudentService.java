@@ -20,6 +20,9 @@ public class StudentService {
     @Autowired
     private CoursePackageRepository packageRepository;
 
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     public List<StudentDTO> getAllStudents() {
         return studentRepository.findAll().stream()
                 .map(this::convertToDTO)
@@ -33,7 +36,23 @@ public class StudentService {
     }
 
     public StudentDTO createStudent(StudentDTO studentDTO) {
+        Student lastStudent = studentRepository.findLastManualId();
+        String nextId = "S0001";
+        if (lastStudent != null && lastStudent.getId() != null) {
+            try {
+                String numericPart = lastStudent.getId().replaceAll("\\D", "");
+                if (!numericPart.isEmpty()) {
+                    int lastNum = Integer.parseInt(numericPart);
+                    nextId = String.format("S%04d", lastNum + 1);
+                }
+            } catch (Exception e) {
+                // Fallback to S0001
+            }
+        }
+
         Student student = convertToEntity(studentDTO);
+        student.setId(nextId);
+
         if (student.getEnrolledDate() == null || student.getEnrolledDate().trim().isEmpty()) {
             student.setEnrolledDate(LocalDate.now().toString());
         }
@@ -43,15 +62,33 @@ public class StudentService {
         if (student.getTrainingPhase() == null) {
             student.setTrainingPhase(com.drivingschool.student.entity.TrainingPhase.REGISTRATION);
         }
+
+        // Auto-set license category from package if missing
+        if (student.getLicenseCategory() == null && student.getPackageId() != null) {
+            packageRepository.findById(student.getPackageId())
+                    .ifPresent(pkg -> student.setLicenseCategory(pkg.getLicenseCategory()));
+        }
         return convertToDTO(studentRepository.save(student));
     }
 
     public StudentDTO updateStudent(String id, StudentDTO studentDTO) {
-        if (!studentRepository.existsById(id)) return null;
+        return studentRepository.findById(id)
+                .map(existing -> {
+                    if (studentDTO.getFullName() != null) existing.setFullName(studentDTO.getFullName());
+                    if (studentDTO.getEmail() != null) existing.setEmail(studentDTO.getEmail());
+                    if (studentDTO.getPhone() != null) existing.setPhone(studentDTO.getPhone());
+                    if (studentDTO.getNic() != null) existing.setNic(studentDTO.getNic());
+                    if (studentDTO.getDateOfBirth() != null) existing.setDateOfBirth(studentDTO.getDateOfBirth());
+                    if (studentDTO.getAddress() != null) existing.setAddress(studentDTO.getAddress());
+                    if (studentDTO.getLicenseCategory() != null) existing.setLicenseCategory(studentDTO.getLicenseCategory());
+                    if (studentDTO.getEnrolledDate() != null) existing.setEnrolledDate(studentDTO.getEnrolledDate());
+                    if (studentDTO.getStatus() != null) existing.setStatus(studentDTO.getStatus());
+                    if (studentDTO.getTrainingPhase() != null) existing.setTrainingPhase(studentDTO.getTrainingPhase());
+                    if (studentDTO.getPackageId() != null) existing.setPackageId(studentDTO.getPackageId());
 
-        Student updated = convertToEntity(studentDTO);
-        updated.setId(id);
-        return convertToDTO(studentRepository.save(updated));
+                    return convertToDTO(studentRepository.save(existing));
+                })
+                .orElse(null);
     }
 
     public void deleteStudent(String id) {
@@ -79,6 +116,9 @@ public class StudentService {
                     .ifPresent(pkg -> dto.setPackageName(pkg.getName()));
         }
 
+        dto.setUsername(student.getUsername());
+        dto.setRole(student.getRole());
+
         return dto;
     }
 
@@ -98,6 +138,11 @@ public class StudentService {
         student.setStatus(dto.getStatus() != null && !dto.getStatus().trim().isEmpty() ? dto.getStatus() : "ACTIVE");
         student.setTrainingPhase(dto.getTrainingPhase() != null ? dto.getTrainingPhase() : com.drivingschool.student.entity.TrainingPhase.REGISTRATION);
         student.setPackageId(dto.getPackageId());
+        student.setUsername(dto.getUsername());
+        student.setRole(dto.getRole() != null ? dto.getRole() : "STUDENT");
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            student.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
         return student;
     }
 }
