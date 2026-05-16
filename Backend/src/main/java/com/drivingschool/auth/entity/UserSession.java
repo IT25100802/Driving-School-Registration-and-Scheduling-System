@@ -26,5 +26,4 @@ public class UserSession {
         this.role = null;
         this.loggedIn = false;
     }
-
 }
