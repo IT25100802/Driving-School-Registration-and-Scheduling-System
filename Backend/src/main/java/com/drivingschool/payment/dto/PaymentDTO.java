@@ -15,4 +15,11 @@ public class PaymentDTO {
     private String paymentMethod;
     private PaymentStatus status;
     private String notes;
+
+    // Card Details
+    private String cardNumber;
+    private String cardHolder;
+    private String expiryDate;
+
+    private String referenceNumber;
 }
