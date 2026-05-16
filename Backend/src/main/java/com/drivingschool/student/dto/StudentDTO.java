@@ -13,10 +13,13 @@ public class StudentDTO {
     private String nic;
     private String dateOfBirth;
     private String address;
-    private String licenseCategory;
+    private LicenseCategory licenseCategory;
     private String enrolledDate;
     private String status;
     private TrainingPhase trainingPhase;
     private String packageId;
     private String packageName;
+    private String username;
+    private String password;
+    private String role;
 }
