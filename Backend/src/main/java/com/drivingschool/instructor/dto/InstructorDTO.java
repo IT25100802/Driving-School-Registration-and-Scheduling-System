@@ -15,4 +15,7 @@ public class InstructorDTO {
     private int yearsOfExperience;
     private String status;
     private String joinedDate;
+    private String username;
+    private String password;
+    private String role;
 }
