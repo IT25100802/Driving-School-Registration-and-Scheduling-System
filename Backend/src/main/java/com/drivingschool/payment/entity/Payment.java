@@ -17,10 +17,12 @@ public class Payment {
     private String packageId;
     private double amount;
     private String paymentDate;
-    private String paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
-    private String notes;
 
     // Card Details (Finishing Card Implementation)
     private String cardNumber;
