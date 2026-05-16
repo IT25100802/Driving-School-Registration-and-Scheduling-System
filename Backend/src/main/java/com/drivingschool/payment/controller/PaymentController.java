@@ -43,4 +43,22 @@ public class PaymentController {
         PaymentDTO updated = paymentService.refundPayment(id);
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/approve/{id}")
+    public ResponseEntity<PaymentDTO> approvePayment(@PathVariable String id) {
+        PaymentDTO updated = paymentService.approvePayment(id);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/reject/{id}")
+    public ResponseEntity<PaymentDTO> rejectPayment(@PathVariable String id) {
+        PaymentDTO updated = paymentService.rejectPayment(id);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PaymentDTO> updatePayment(@PathVariable String id, @RequestBody PaymentDTO paymentDTO) {
+        PaymentDTO updated = paymentService.updatePayment(id, paymentDTO);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    }
 }
