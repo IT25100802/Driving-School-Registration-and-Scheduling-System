@@ -36,5 +36,4 @@ public class AuthService {
     public UserSession getCurrentSession() {
         return userSession;
     }
-
 }
