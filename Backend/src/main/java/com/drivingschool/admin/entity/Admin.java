@@ -19,5 +19,4 @@ public class Admin {
     private String phone;
     @Enumerated(EnumType.STRING)
     private AdminRole role;
-
 }
