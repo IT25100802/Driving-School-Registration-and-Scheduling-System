@@ -7,7 +7,7 @@ import lombok.Data;
 public class InstructorDTO {
     private String id;
     
-    private String email;
+    
     private String phone;
     private String nic;
     private String licenseNumber;
@@ -17,5 +17,5 @@ public class InstructorDTO {
     private String joinedDate;
     private String username;
     private String password;
-    private String role;
+    
 }
