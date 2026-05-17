@@ -39,9 +39,7 @@ public class InstructorService {
                     int lastNum = Integer.parseInt(numericPart);
                     nextId = String.format("I%04d", lastNum + 1);
                 }
-            } catch (Exception e) {
-                // Fallback to I0001
-            }
+            } 
         }
 
         Instructor instructor = convertToEntity(instructorDTO);
@@ -105,7 +103,7 @@ public class InstructorService {
         instructor.setFullName(dto.getFullName());
         instructor.setEmail(dto.getEmail());
         instructor.setPhone(dto.getPhone());
-        instructor.setNic(dto.getNic());
+        
         instructor.setLicenseNumber(dto.getLicenseNumber());
         instructor.setSpecialization(dto.getSpecialization());
         instructor.setYearsOfExperience(dto.getYearsOfExperience());
