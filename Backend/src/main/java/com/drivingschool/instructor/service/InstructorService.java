@@ -96,13 +96,13 @@ public class InstructorService {
     }
 
     private Instructor convertToEntity(InstructorDTO dto) {
-        Instructor instructor = new Instructor();
+        
         if (dto.getId() != null && !dto.getId().trim().isEmpty()) {
             instructor.setId(dto.getId());
         }
         instructor.setFullName(dto.getFullName());
         instructor.setEmail(dto.getEmail());
-        instructor.setPhone(dto.getPhone());
+       
         
         instructor.setLicenseNumber(dto.getLicenseNumber());
         instructor.setSpecialization(dto.getSpecialization());
