@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@RestController
+@RequestMapping("/api/instructors")
+@CrossOrigin(origins = "*")
+public class InstructorController {
 
     @Autowired
     private InstructorService instructorService;
@@ -35,5 +38,9 @@ import java.util.List;
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
-    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteInstructor(@PathVariable String id) {
+        instructorService.deleteInstructor(id);
+        return ResponseEntity.ok().build();
+    }
 }
