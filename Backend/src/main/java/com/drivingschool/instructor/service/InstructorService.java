@@ -3,9 +3,12 @@ package com.drivingschool.instructor.service;
 import com.drivingschool.instructor.dto.InstructorDTO;
 import com.drivingschool.instructor.entity.Instructor;
 import com.drivingschool.instructor.repository.InstructorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-
-
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InstructorService {
@@ -38,7 +41,9 @@ public class InstructorService {
                     int lastNum = Integer.parseInt(numericPart);
                     nextId = String.format("I%04d", lastNum + 1);
                 }
-            } 
+            } catch (Exception e) {
+                // Fallback to I0001
+            }
         }
 
         Instructor instructor = convertToEntity(instructorDTO);
@@ -95,14 +100,14 @@ public class InstructorService {
     }
 
     private Instructor convertToEntity(InstructorDTO dto) {
-        
+        Instructor instructor = new Instructor();
         if (dto.getId() != null && !dto.getId().trim().isEmpty()) {
             instructor.setId(dto.getId());
         }
         instructor.setFullName(dto.getFullName());
         instructor.setEmail(dto.getEmail());
-       
-        
+        instructor.setPhone(dto.getPhone());
+        instructor.setNic(dto.getNic());
         instructor.setLicenseNumber(dto.getLicenseNumber());
         instructor.setSpecialization(dto.getSpecialization());
         instructor.setYearsOfExperience(dto.getYearsOfExperience());
