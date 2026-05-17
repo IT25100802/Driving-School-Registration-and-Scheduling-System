@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/instructors")
-@CrossOrigin(origins = "*")
-public class InstructorController {
+
 
     @Autowired
     private InstructorService instructorService;
