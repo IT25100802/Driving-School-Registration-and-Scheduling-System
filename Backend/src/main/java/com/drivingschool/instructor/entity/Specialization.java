@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Specialization {
     MOTORCYCLE("Motorcycle"),
-    LIGHT_VEHICLE("Light Vehicle"),
+    
     HEAVY_VEHICLE("Heavy Vehicle"),
     
 
