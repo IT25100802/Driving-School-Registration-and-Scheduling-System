@@ -3,8 +3,7 @@ package com.drivingschool.instructor.service;
 import com.drivingschool.instructor.dto.InstructorDTO;
 import com.drivingschool.instructor.entity.Instructor;
 import com.drivingschool.instructor.repository.InstructorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 
 
 
