@@ -35,9 +35,5 @@ import java.util.List;
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInstructor(@PathVariable String id) {
-        instructorService.deleteInstructor(id);
-        return ResponseEntity.ok().build();
-    }
+    
 }
