@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveHUB - Sign Up</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #f1f5f9, var(--bg-dark));
+            padding: 2rem;
+        }
+
+        .signup-card {
+            width: 100%;
+            max-width: 500px;
+            padding: 2.5rem;
+        }
+
+        .brand-logo {
+            margin: 0 auto 1.5rem;
+            width: 60px;
+            height: 60px;
+        }
+
+        .form-control.search-input {
+            padding-left: 3.75rem;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* Custom Role Selector */
+        .role-selector {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 4px;
+            display: flex;
+            margin-bottom: 2rem;
+        }
+
+        .role-option {
+            flex: 1;
+        }
+
+        .role-option input {
+            display: none;
+        }
+
+        .role-option label {
+            display: block;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .role-option input:checked+label {
+            color: white;
+            background: var(--accent-color);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glass-card signup-card text-center">
+        <div class="brand-logo">
+            <i data-lucide="user-plus" class="text-indigo-400" size="32"></i>
+        </div>
+        <h2 class="h3 fw-bold mb-1">Create Account</h2>
+        <p class="text-secondary mb-4 text-sm">Join DriveHUB as a Student or Instructor.</p>
+
+        <form id="signupForm" class="text-start">
+            <div id="errorAlert" class="alert alert-danger d-none py-2 text-sm" role="alert"></div>
+            <div id="successAlert" class="alert alert-success d-none py-2 text-sm" role="alert"></div>
+
+            <div class="mb-4 text-center">
+                <label class="form-label text-xs fw-bold uppercase tracking-widest text-secondary mb-3 d-block">I am
+                    a</label>
+                <div class="role-selector">
+                    <div class="role-option">
+                        <input type="radio" name="role" id="roleStudent" value="STUDENT" checked>
+                        <label for="roleStudent">Student</label>
+                    </div>
+                    <div class="role-option">
+                        <input type="radio" name="role" id="roleInstructor" value="INSTRUCTOR">
+                        <label for="roleInstructor">Instructor</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <i data-lucide="user" size="18" class="input-icon"></i>
+                <input type="text" id="fullName" class="form-control search-input" placeholder="Full Name" required>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <i data-lucide="mail" size="18" class="input-icon"></i>
+                <input type="email" id="email" class="form-control search-input" placeholder="Email Address" required>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <i data-lucide="phone" size="18" class="input-icon"></i>
+                <input type="tel" id="phone" class="form-control search-input" placeholder="Phone Number" required>
+            </div>
+
+            <div class="mb-4 position-relative">
+                <i data-lucide="lock" size="18" class="input-icon"></i>
+                <input type="password" id="password" class="form-control search-input" placeholder="Create Password"
+                    required>
+            </div>
+
+            <button type="submit" class="btn btn-primary-modern w-100 justify-content-center mb-3">
+                Create Account <i data-lucide="check" size="18" class="ms-1"></i>
+            </button>
+
+            <p class="text-center text-sm text-secondary m-0">
+                Already have an account? <a href="login.html"
+                    class="text-indigo-400 text-decoration-none fw-semibold">Login</a>
+            </p>
+        </form>
+    </div>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const role = document.querySelector('input[name="role"]:checked').value;
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+
+            const errorAlert = document.getElementById('errorAlert');
+            const successAlert = document.getElementById('successAlert');
+
+            errorAlert.classList.add('d-none');
+            successAlert.classList.add('d-none');
+
+            try {
+                const res = await fetch('http://localhost:8080/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role, fullName, email, phone, password })
+                });
+
+                const text = await res.text();
+
+                if (res.ok) {
+                    successAlert.textContent = text + '. Redirecting to login...';
+                    successAlert.classList.remove('d-none');
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else {
+                    errorAlert.textContent = text || 'Failed to sign up';
+                    errorAlert.classList.remove('d-none');
+                }
+            } catch (err) {
+                errorAlert.textContent = 'Connection error';
+                errorAlert.classList.remove('d-none');
+            }
+        });
+    </script>
+</body>
+
+</html>

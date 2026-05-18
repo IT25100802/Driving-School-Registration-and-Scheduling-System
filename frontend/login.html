@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveHUB - Login</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/api.js"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at top right, #f1f5f9, var(--bg-dark));
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 2.5rem;
+        }
+
+        .brand-logo {
+            margin: 0 auto 1.5rem;
+            width: 60px;
+            height: 60px;
+        }
+
+        .form-control.search-input {
+            padding-left: 3.75rem;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glass-card login-card text-center">
+        <div class="brand-logo">
+            <i data-lucide="car-front" class="text-indigo-400" size="32"></i>
+        </div>
+        <h2 class="h3 fw-bold mb-1">Welcome Back</h2>
+        <p class="text-secondary mb-4 text-sm">Log in to DriveHUB to manage your account.</p>
+
+        <form id="loginForm" class="text-start">
+            <div id="errorAlert" class="alert alert-danger d-none py-2 text-sm" role="alert"></div>
+
+            <div class="mb-3 position-relative">
+                <i data-lucide="mail" size="18" class="input-icon"></i>
+                <input type="text" id="username" class="form-control search-input" placeholder="Email or Username"
+                    required>
+            </div>
+
+            <div class="mb-4 position-relative">
+                <i data-lucide="lock" size="18" class="input-icon"></i>
+                <input type="password" id="password" class="form-control search-input" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary-modern w-100 justify-content-center mb-3">
+                Login <i data-lucide="arrow-right" size="18" class="ms-1"></i>
+            </button>
+
+            <p class="text-center text-sm text-secondary m-0">
+                Don't have an account? <a href="signup.html"
+                    class="text-indigo-400 text-decoration-none fw-semibold">Sign Up</a>
+            </p>
+        </form>
+    </div>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorAlert = document.getElementById('errorAlert');
+
+            try {
+                // Send basic login request
+                const res = await fetch('http://localhost:8080/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userRole', data.role);
+                    localStorage.setItem('userName', data.fullName || data.username);
+                    window.location.href = 'index.html';
+                } else {
+                    const text = await res.text();
+                    errorAlert.textContent = text || 'Invalid credentials';
+                    errorAlert.classList.remove('d-none');
+                }
+            } catch (err) {
+                errorAlert.textContent = 'Connection error';
+                errorAlert.classList.remove('d-none');
+            }
+        });
+    </script>
+</body>
+
+</html>

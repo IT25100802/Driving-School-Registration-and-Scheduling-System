@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9b85262e-0118-486d-92f2-1a68f97f6565" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../../../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/auth/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/auth/controller/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/auth/security/CustomUserDetailsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/auth/security/CustomUserDetailsService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/dashboard/DashboardController.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/dashboard/DashboardController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/schedule/service/ScheduleService.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/schedule/service/ScheduleService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/controller/StudentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/controller/StudentController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/dto/StudentDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/dto/StudentDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/entity/LicenseCategory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/entity/Student.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/entity/Student.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/exception/StudentException.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/exception/StudentException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/repository/StudentRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/repository/StudentRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/service/StudentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/student/service/StudentService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/vehicle/dto/VehicleDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/vehicle/dto/VehicleDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/vehicle/entity/Vehicle.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/vehicle/entity/Vehicle.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/vehicle/service/VehicleService.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../target/classes/com/drivingschool/vehicle/service/VehicleService.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../../.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "IT25100802"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/IT25100802/Driving-School-Registration-and-Scheduling-System.git",
+    "accountId": "3649581a-c423-42d4-aab1-c4967119e8a7"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="3DtObIw0nIdDywGhUQxyzV9RYRj" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "dev",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-cffe25b9f5b3-intellij.indexing.shared.core-IU-253.28294.334" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9b85262e-0118-486d-92f2-1a68f97f6565" name="Changes" comment="" />
+      <created>1779097971787</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1779097971787</updated>
+    </task>
+    <servers />
+  </component>
+</project>
