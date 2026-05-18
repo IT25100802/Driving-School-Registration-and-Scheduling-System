@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveHUB - Schedules & Calendar</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/api.js"></script>
+    <script src="js/components.js"></script>
+</head>
+
+<body>
+
+    <main class="main-content">
+        <div class="container-fluid p-0">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="h3 fw-bold mb-1">Schedules & Calendar</h2>
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="icon-btn text-secondary" onclick="changeMonth(-1)"><i data-lucide="chevron-left"
+                                size="18"></i></button>
+                        <p class="text-secondary mb-0 fw-semibold" id="currentMonthYear"
+                            style="min-width: 160px; text-align: center;">October 2023</p>
+                        <button class="icon-btn text-secondary" onclick="changeMonth(1)"><i data-lucide="chevron-right"
+                                size="18"></i></button>
+                    </div>
+                </div>
+                <button class="btn-modern btn-primary-modern" data-bs-toggle="modal" data-bs-target="#bookLessonModal">
+                    <i data-lucide="plus" class="me-2" size="18"></i> Book Lesson
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-9">
+                <div class="glass-card p-4">
+                    <div id="calendarGrid" class="row g-2 mb-5">
+                        <!-- Calendar logic... -->
+                    </div>
+                    <div class="mt-4">
+                        <h5 class="fw-bold mb-3">Today's Schedule</h5>
+                        <div class="table-responsive">
+                            <table class="table custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Student</th>
+                                        <th>Instructor</th>
+                                        <th>Vehicle</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="todayScheduleBody">
+                                    <!-- Data injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="glass-card mb-4">
+                    <h5 class="fw-bold mb-4">Upcoming</h5>
+                    <div id="upcomingSchedules" class="d-flex flex-column gap-3">
+                        <!-- Data injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <!-- Modal... -->
+    <div class="modal fade" id="bookLessonModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 glass-card p-0 shadow-2xl">
+                <div class="modal-header border-black/10 p-5 pb-4 position-relative">
+                    <div>
+                        <h4 class="modal-title fw-bold display-6 tracking-tight">Book New Lesson</h4>
+                        <p class="text-secondary text-sm m-0 mt-1">Schedule a new training session.</p>
+                    </div>
+                    <button type="button" class="icon-btn position-absolute top-0 end-0 m-4 text-secondary"
+                        data-bs-dismiss="modal">
+                        <i data-lucide="x" size="24"></i>
+                    </button>
+                </div>
+                <form id="bookLessonForm">
+                    <div class="modal-body p-5 pt-4">
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-12">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Student</label>
+                                <select class="search-input form-select" id="schStudent" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Instructor</label>
+                                <select class="search-input form-select" id="schInstructor" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Vehicle</label>
+                                <select class="search-input form-select" id="schVehicle" required></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Date</label>
+                                <input type="date" class="search-input" id="schDate" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Start
+                                    Time</label>
+                                <input type="time" class="search-input" id="schStart" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">End
+                                    Time</label>
+                                <input type="time" class="search-input" id="schEnd" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Lesson
+                                    Type</label>
+                                <select class="search-input form-select" id="schType" required>
+                                    <option value="PRACTICAL_CAR">Practical Car</option>
+                                    <option value="PRACTICAL_BIKE">Practical Bike</option>
+                                    <option value="THEORY_CLASS">Theory Class</option>
+                                    <option value="TRIAL_EXAM">Trial Exam</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-modern btn-primary-modern w-100 py-3">Book Lesson</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Lesson Modal -->
+    <div class="modal fade" id="editLessonModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 glass-card p-0 shadow-2xl">
+                <div class="modal-header border-black/10 p-5 pb-4 position-relative">
+                    <div>
+                        <h4 class="modal-title fw-bold display-6 tracking-tight">Edit Lesson</h4>
+                        <p class="text-secondary text-sm m-0 mt-1">Modify session details or status.</p>
+                    </div>
+                    <button type="button" class="icon-btn position-absolute top-0 end-0 m-4 text-secondary"
+                        data-bs-dismiss="modal">
+                        <i data-lucide="x" size="24"></i>
+                    </button>
+                </div>
+                <form id="editLessonForm">
+                    <input type="hidden" id="editSchId">
+                    <div class="modal-body p-5 pt-4">
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-12">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Student</label>
+                                <select class="search-input form-select" id="editSchStudent" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Instructor</label>
+                                <select class="search-input form-select" id="editSchInstructor" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Vehicle</label>
+                                <select class="search-input form-select" id="editSchVehicle" required></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Date</label>
+                                <input type="date" class="search-input" id="editSchDate" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Start
+                                    Time</label>
+                                <input type="time" class="search-input" id="editSchStart" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">End
+                                    Time</label>
+                                <input type="time" class="search-input" id="editSchEnd" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Lesson
+                                    Type</label>
+                                <select class="search-input form-select" id="editSchType" required>
+                                    <option value="PRACTICAL_CAR">Practical Car</option>
+                                    <option value="PRACTICAL_BIKE">Practical Bike</option>
+                                    <option value="THEORY_CLASS">Theory Class</option>
+                                    <option value="TRIAL_EXAM">Trial Exam</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase mb-3">Status</label>
+                                <select class="search-input form-select" id="editSchStatus" required>
+                                    <option value="SCHEDULED">Scheduled</option>
+                                    <option value="COMPLETED">Completed</option>
+                                    <option value="NO_SHOW">No Show</option>
+                                    <option value="CANCELED">Canceled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-modern btn-primary-modern w-100 py-3">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function formatLabel(str) {
+            if (!str) return 'General';
+            // Handle if it's an object or string
+            const labelStr = typeof str === 'object' ? (str.name || str.toString()) : String(str);
+            return labelStr.split('_').map(word =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            ).join(' ');
+        }
+
+        let allSchedules = [];
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+
+        async function initPage() {
+            try {
+                const [schedules, students, instructors, vehicles] = await Promise.all([
+                    api.getSchedules(),
+                    api.getStudents(),
+                    api.getInstructors(),
+                    api.getVehicles()
+                ]);
+
+                const role = localStorage.getItem('userRole');
+                const userName = localStorage.getItem('userName');
+                const isStudent = role === 'ROLE_STUDENT';
+
+                allSchedules = schedules;
+
+                if (isStudent) {
+                    // We keep allSchedules as the full list so they can see others
+                    // But we might want to highlight their own in the list/calendar?
+                    // The user said they can see others, so this is fine.
+                }
+                renderCalendar();
+                renderTodaySchedule();
+                renderUpcoming();
+                populateSelects(students, instructors, vehicles);
+            } catch (error) {
+                console.error('Error initializing page:', error);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const now = new Date();
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            // Update Title
+            document.getElementById('currentMonthYear').textContent = new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            grid.innerHTML = '';
+
+            // Add Day Headers
+            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                grid.innerHTML += `<div style="width: 14.28%;" class="text-center text-xs fw-bold text-secondary text-uppercase py-3">${day}</div>`;
+            });
+
+            // Add Empty Slots
+            for (let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div style="width: 14.28%;" class="p-1"><div class="h-24 rounded-4 bg-white/5 opacity-10"></div></div>`;
+            }
+
+            // Add Days
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const hasLessons = allSchedules.some(s => s.scheduleDate === dateStr);
+                const isToday = d === now.getDate() && currentMonth === now.getMonth() && currentYear === now.getFullYear();
+
+                let cardClass = 'border-black/5 bg-black/5';
+                let textClass = 'text-secondary fw-normal';
+                let fontSize = '1.1rem';
+
+                if (isToday) {
+                    cardClass = 'shadow-lg';
+                    textClass = 'text-white fw-bold';
+                    fontSize = '1.3rem';
+                    const currentDayStyle = 'background: #2563eb !important; border: 2px solid #2563eb !important;';
+                    grid.innerHTML += `
+                        <div style="width: 14.28%;" class="p-1">
+                            <div class="h-24 rounded-4 ${cardClass} d-flex align-items-center justify-content-center position-relative hover-scale cursor-pointer" style="${currentDayStyle}" onclick="filterByDate('${dateStr}')">
+                                <span class="${textClass}" style="font-size: ${fontSize};">${d}</span>
+                            </div>
+                        </div>
+                    `;
+                    continue;
+                } else if (hasLessons) {
+                    cardClass = 'border-2 border-yellow-400 bg-yellow-400/5 shadow-lg shadow-yellow-400/10';
+                    textClass = 'text-yellow-400 fw-bold';
+                    fontSize = '1.3rem';
+                }
+
+                grid.innerHTML += `
+                    <div style="width: 14.28%;" class="p-1">
+                        <div class="h-24 rounded-4 border ${cardClass} d-flex align-items-center justify-content-center position-relative hover-scale cursor-pointer" onclick="filterByDate('${dateStr}')">
+                            <span class="${textClass}" style="font-size: ${fontSize};">${d}</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function filterByDate(dateStr) {
+            const filtered = allSchedules.filter(s => s.scheduleDate === dateStr);
+            renderTodaySchedule(filtered, dateStr);
+        }
+
+        function renderTodaySchedule(schedules = null, dateStr = null) {
+            const tbody = document.getElementById('todayScheduleBody');
+            const targetDate = dateStr || new Date().toLocaleDateString('en-CA');
+            const displaySchedules = schedules || allSchedules.filter(s => s.scheduleDate === targetDate);
+
+            document.querySelector('h5.fw-bold.mb-3').textContent = dateStr ? `Schedule for ${dateStr}` : "Today's Schedule";
+
+            tbody.innerHTML = displaySchedules.length ? '' : `<tr><td colspan="7" class="text-center text-secondary py-4">No lessons scheduled for ${targetDate}.</td></tr>`;
+
+            displaySchedules.forEach(s => {
+                const tr = document.createElement('tr');
+                let statusBadge = 'badge-info';
+                if (s.status === 'COMPLETED') statusBadge = 'badge-success';
+                if (s.status === 'NO_SHOW' || s.status === 'CANCELED') statusBadge = 'badge-warning';
+
+                const role = localStorage.getItem('userRole');
+                const userName = localStorage.getItem('userName');
+                const isStudent = role === 'ROLE_STUDENT';
+
+                tr.innerHTML = `
+                    <td>${s.startTime || '--:--'} - ${s.endTime || '--:--'}</td>
+                    <td class="fw-bold">${s.studentName || 'Student'}</td>
+                    <td>${s.instructorName || 'Instructor'}</td>
+                    <td>${s.vehicleRegistration || 'Vehicle'}</td>
+                    <td><span class="badge bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-3">${formatLabel(s.scheduleType || s.type)}</span></td>
+                    <td><span class="badge-custom ${statusBadge} px-3">${s.status || 'SCHEDULED'}</span></td>
+                    <td class="text-end">
+                        ${(!isStudent || s.studentName === userName) ? `
+                        <div class="d-flex justify-content-end gap-2">
+                            <button class="icon-btn text-indigo-400" onclick="editSchedule('${s.id}')"><i data-lucide="edit-3" size="16"></i></button>
+                            <button class="icon-btn text-rose-500 hover-text-rose-600" onclick="deleteSchedule('${s.id}')"><i data-lucide="trash-2" size="16"></i></button>
+                        </div>
+                        ` : ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        async function editSchedule(id) {
+            const s = await api.getScheduleById(id);
+            document.getElementById('editSchId').value = s.id;
+            document.getElementById('editSchStudent').value = s.studentId;
+            document.getElementById('editSchInstructor').value = s.instructorId;
+            document.getElementById('editSchVehicle').value = s.vehicleId;
+            document.getElementById('editSchDate').value = s.scheduleDate;
+            document.getElementById('editSchStart').value = s.startTime;
+            document.getElementById('editSchEnd').value = s.endTime;
+            document.getElementById('editSchType').value = s.scheduleType;
+            document.getElementById('editSchStatus').value = s.status;
+            new bootstrap.Modal(document.getElementById('editLessonModal')).show();
+        }
+
+        document.getElementById('editLessonForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editSchId').value;
+            const data = {
+                id: id,
+                studentId: document.getElementById('editSchStudent').value,
+                instructorId: document.getElementById('editSchInstructor').value,
+                vehicleId: document.getElementById('editSchVehicle').value,
+                scheduleDate: document.getElementById('editSchDate').value,
+                startTime: document.getElementById('editSchStart').value,
+                endTime: document.getElementById('editSchEnd').value,
+                scheduleType: document.getElementById('editSchType').value,
+                status: document.getElementById('editSchStatus').value
+            };
+            await api.updateSchedule(id, data);
+            bootstrap.Modal.getInstance(document.getElementById('editLessonModal')).hide();
+            initPage();
+        });
+
+        async function updateScheduleStatus(id, newStatus) {
+            try {
+                const schedule = allSchedules.find(s => s.id === id);
+                if (schedule) {
+                    schedule.status = newStatus;
+                    await api.updateSchedule(id, schedule);
+                    initPage();
+                }
+            } catch (err) {
+                console.error("Error updating status:", err);
+            }
+        }
+
+        async function deleteSchedule(id) {
+            if (confirm('Delete this schedule?')) {
+                await api.deleteSchedule(id);
+                initPage();
+            }
+        }
+
+        function renderUpcoming() {
+            const container = document.getElementById('upcomingSchedules');
+            const today = new Date().toLocaleDateString('en-CA');
+            const upcoming = allSchedules.filter(s => s.scheduleDate > today).sort((a, b) => a.scheduleDate.localeCompare(b.scheduleDate)).slice(0, 5);
+
+            container.innerHTML = upcoming.length ? '' : '<p class="text-secondary text-sm">No upcoming lessons.</p>';
+
+            upcoming.forEach(s => {
+                const date = new Date(s.scheduleDate);
+                container.innerHTML += `
+                    <div class="d-flex gap-3 align-items-center">
+                        <div class="w-12 h-12 rounded-3 bg-black/5 d-flex flex-column align-items-center justify-center border border-black/5">
+                            <span class="text-xs text-secondary fw-bold">${date.toLocaleString('default', { month: 'short' }).toUpperCase()}</span>
+                            <span class="fw-bold">${date.getDate()}</span>
+                        </div>
+                        <div>
+                            <p class="text-sm fw-bold m-0">${s.studentName}</p>
+                            <p class="text-xs text-secondary m-0">${s.startTime} with ${s.instructorName}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function populateSelects(students, instructors, vehicles) {
+            const stSel = document.getElementById('schStudent');
+            const inSel = document.getElementById('schInstructor');
+            const vSel = document.getElementById('schVehicle');
+
+            const eStSel = document.getElementById('editSchStudent');
+            const eInSel = document.getElementById('editSchInstructor');
+            const eVSel = document.getElementById('editSchVehicle');
+
+            stSel.innerHTML = inSel.innerHTML = vSel.innerHTML = '';
+            eStSel.innerHTML = eInSel.innerHTML = eVSel.innerHTML = '';
+
+            const role = localStorage.getItem('userRole');
+            const userName = localStorage.getItem('userName');
+            const isStudent = role === 'ROLE_STUDENT';
+
+            students.forEach(s => {
+                if (isStudent && s.fullName !== userName) return;
+                const opt = `<option value="${s.id}">${s.fullName}</option>`;
+                stSel.innerHTML += opt;
+                eStSel.innerHTML += opt;
+            });
+
+            if (isStudent) {
+                stSel.disabled = true;
+                eStSel.disabled = true;
+            }
+            instructors.forEach(i => {
+                const opt = `<option value="${i.id}">${i.fullName}</option>`;
+                inSel.innerHTML += opt;
+                eInSel.innerHTML += opt;
+            });
+            vehicles.forEach(v => {
+                const opt = `<option value="${v.id}">${v.registrationNumber} (${v.make})</option>`;
+                vSel.innerHTML += opt;
+                eVSel.innerHTML += opt;
+            });
+
+            // Restriction: Students cannot book Trial Exams
+            if (isStudent) {
+                const trialOption = document.querySelector('#schType option[value="TRIAL_EXAM"]');
+                if (trialOption) trialOption.remove();
+
+                const editTrialOption = document.querySelector('#editSchType option[value="TRIAL_EXAM"]');
+                if (editTrialOption) editTrialOption.remove();
+            }
+        }
+
+        document.getElementById('bookLessonForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                studentId: document.getElementById('schStudent').value,
+                instructorId: document.getElementById('schInstructor').value,
+                vehicleId: document.getElementById('schVehicle').value,
+                scheduleDate: document.getElementById('schDate').value,
+                startTime: document.getElementById('schStart').value,
+                endTime: document.getElementById('schEnd').value,
+                scheduleType: document.getElementById('schType').value,
+                status: 'SCHEDULED'
+            };
+            await api.createSchedule(data);
+            bootstrap.Modal.getInstance(document.getElementById('bookLessonModal')).hide();
+            initPage();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebar('schedules');
+            initPage();
+            document.getElementById('currentMonthYear').textContent = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            // Handle Quick Action from Dashboard
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('action') === 'add') {
+                new bootstrap.Modal(document.getElementById('bookLessonModal')).show();
+            }
+        });
+    </script>
+</body>
+
+</html>

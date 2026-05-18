@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveHUB - Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/api.js"></script>
+    <script src="js/components.js"></script>
+</head>
+
+<body>
+
+    <main class="main-content">
+        <!-- Header will be injected here -->
+
+        <div class="container-fluid p-0">
+            <!-- Student View Container -->
+            <div id="studentDashboard" class="d-none">
+                <!-- Welcome Banner -->
+                <div class="mb-5">
+                    <h1 class="display-5 fw-bold text-navy mb-1" id="studentWelcome">Welcome!</h1>
+                    <p class="text-secondary fs-5">Here's your current progress and upcoming schedule.</p>
+                </div>
+
+                <!-- Training Progress Stepper -->
+                <div class="glass-card p-4 mb-5 border-0 shadow-sm overflow-hidden">
+                    <h5 class="text-xs fw-bold text-secondary text-uppercase tracking-widest mb-4">Training Journey
+                        Progress</h5>
+                    <div class="position-relative px-5">
+                        <!-- Progress Line -->
+                        <div class="position-absolute start-0 w-100"
+                            style="top: 20px; height: 3px; background: rgba(0,0,0,0.05); z-index: 0; left: 0; padding: 0 50px;">
+                            <div id="progressFill" class="h-100 bg-indigo-500 shadow-sm"
+                                style="width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);"></div>
+                        </div>
+                        <!-- Steps -->
+                        <div class="d-flex justify-content-between position-relative" id="stepperContainer"
+                            style="z-index: 1;">
+                            <!-- Steps injected here -->
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="badge bg-indigo-500/10 text-indigo-400 px-3 py-1.5 rounded-pill fw-bold"
+                            id="currentPhaseLabel" style="font-size: 0.7rem; letter-spacing: 0.5px;">Current:
+                            Registration</span>
+                    </div>
+                </div>
+
+                <div class="row g-5">
+                    <!-- Upcoming Lessons -->
+                    <div class="col-lg-8">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="h5 fw-bold mb-0">My Upcoming Schedule</h4>
+                            <a href="schedules.html" class="text-indigo-400 text-sm text-decoration-none fw-bold">View
+                                Calendar <i data-lucide="calendar" size="14" class="ms-1"></i></a>
+                        </div>
+                        <div id="upcomingLessonsContainer" class="d-flex flex-column gap-3" style="min-height: 280px;">
+                            <!-- Lesson cards injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Side Info -->
+                    <div class="col-lg-4">
+                        <!-- Enrolled Package Flash Card -->
+                        <div class="package-flash-card rounded-4 p-5 text-center text-white mb-5 shadow-lg position-relative overflow-hidden"
+                            style="background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%); min-height: 280px; d-flex flex-column justify-content-center;">
+                            <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                                <i data-lucide="award" size="100"></i>
+                            </div>
+                            <div class="position-relative z-index-1">
+                                <div class="mb-4">
+                                    <i data-lucide="package" size="40" class="mb-3 opacity-60"></i>
+                                    <h3 class="fw-bold mb-1" id="packageName">Standard Package</h3>
+                                    <span
+                                        class="badge bg-white/20 text-white px-3 py-1 rounded-pill text-xs fw-bold tracking-widest uppercase"
+                                        id="packageCategoryBadge">PRO COURSE</span>
+                                </div>
+                                <div class="pt-4 border-top border-white/10 mt-4">
+                                    <p class="text-xs text-white/60 text-uppercase tracking-widest mb-2">Package
+                                        Investment</p>
+                                    <h4 class="fw-bold m-0" id="packagePrice" style="letter-spacing: 1px;">$0.00</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="instructorDashboard" class="d-none">
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <div>
+                        <h2 class="display-5 fw-bold mb-1 tracking-tight" id="instructorWelcome">Welcome, Instructor!
+                        </h2>
+                        <p class="text-secondary mb-0">Track your students and manage your upcoming training sessions.
+                        </p>
+                    </div>
+                    <div class="text-end glass-card py-2 px-4 border-0" style="background: rgba(0, 0, 0, 0.03);">
+                        <p class="text-xs fw-bold text-secondary text-uppercase tracking-widest mb-1">Live Status</p>
+                        <h4 class="fw-bold m-0 text-navy" id="instructorClock">Loading...</h4>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <div class="glass-card p-4 d-flex align-items-center gap-4">
+                            <div
+                                class="w-14 h-14 bg-indigo-500/10 text-indigo-400 rounded-circle d-flex align-items-center justify-center">
+                                <i data-lucide="users" size="28"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-secondary text-uppercase fw-bold mb-1 tracking-widest">Assigned
+                                    Students</p>
+                                <h2 class="fw-bold m-0 text-navy" id="instructorStudentCount">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="glass-card p-4 d-flex align-items-center gap-4">
+                            <div
+                                class="w-14 h-14 bg-emerald-500/10 text-emerald-400 rounded-circle d-flex align-items-center justify-center">
+                                <i data-lucide="calendar" size="28"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-secondary text-uppercase fw-bold mb-1 tracking-widest">Sessions
+                                    Today</p>
+                                <h2 class="fw-bold m-0 text-navy" id="instructorTodayCount">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="glass-card h-100">
+                            <h4 class="h5 fw-bold mb-4">My Assignments (Next 7 Days)</h4>
+                            <div id="instructorLessonsContainer" class="d-flex flex-column gap-3"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="glass-card mb-4">
+                            <h5 class="text-xs fw-bold text-secondary text-uppercase mb-4 tracking-widest">Quick Actions
+                            </h5>
+                            <div class="d-flex flex-column gap-3">
+                                <button
+                                    class="btn btn-transparent text-start p-3 bg-black/5 border border-black/10 rounded-4 hover-glass w-100 d-flex align-items-center gap-3 transition-all hover:-translate-y-1"
+                                    onclick="window.location.href='students.html?action=add'">
+                                    <div
+                                        class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-xl d-flex align-items-center justify-center shadow-sm">
+                                        <i data-lucide="user-plus" size="18"></i></div>
+                                    <div>
+                                        <p class="m-0 fw-bold text-navy text-sm">Add New Student</p>
+                                    </div>
+                                </button>
+                                <button
+                                    class="btn btn-transparent text-start p-3 bg-black/5 border border-black/10 rounded-4 hover-glass w-100 d-flex align-items-center gap-3 transition-all hover:-translate-y-1"
+                                    onclick="window.location.href='schedules.html?action=add'">
+                                    <div
+                                        class="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-xl d-flex align-items-center justify-center shadow-lg">
+                                        <i data-lucide="calendar-plus" size="18"></i></div>
+                                    <div>
+                                        <p class="m-0 fw-bold text-navy text-sm">Add New Schedule</p>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="glass-card">
+                            <h4 class="h5 fw-bold mb-4">Recent Past Lessons</h4>
+                            <div id="instructorRecentActivity" class="d-flex flex-column gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin View Container -->
+            <div id="adminDashboard">
+                <div class="d-flex justify-content-between align-items-end mb-5">
+                    <div>
+                        <h2 class="display-6 fw-bold mb-1 tracking-tight">Dashboard</h2>
+                        <p class="text-secondary mb-0">Real-time operational overview for DriveHUB Network.</p>
+                    </div>
+                    <div class="text-end glass-card py-2 px-4 border-0" style="background: rgba(0, 0, 0, 0.03);">
+                        <p class="text-xs fw-bold text-secondary text-uppercase tracking-widest mb-1">Live Status</p>
+                        <h4 class="fw-bold m-0 text-navy" id="liveDateTime">Loading...</h4>
+                    </div>
+                </div>
+
+                <!-- Admin Stats Grid -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-3">
+                        <div class="glass-card h-100 d-flex flex-column justify-content-between"
+                            style="min-height: 160px;">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-4">
+                                    <div class="stat-icon bg-indigo-500/10 text-indigo-400">
+                                        <i data-lucide="users" stroke-width="2.5"></i>
+                                    </div>
+                                </div>
+                                <p class="stat-label mb-1">Total Students</p>
+                                <h3 class="stat-value m-0" id="totalStudents">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="glass-card h-100 d-flex flex-column justify-content-between"
+                            style="min-height: 160px;">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-4">
+                                    <div class="stat-icon bg-amber-500/10 text-amber-400">
+                                        <i data-lucide="wallet" stroke-width="2.5"></i>
+                                    </div>
+                                </div>
+                                <p class="stat-label mb-1">Total Revenue</p>
+                                <h3 class="stat-value m-0" id="totalRevenue">$0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="glass-card h-100 d-flex flex-column justify-content-between"
+                            style="min-height: 160px;">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-4">
+                                    <div class="stat-icon bg-emerald-500/10 text-emerald-400">
+                                        <i data-lucide="user-check" stroke-width="2.5"></i>
+                                    </div>
+                                </div>
+                                <p class="stat-label mb-1">Active Instructors</p>
+                                <h3 class="stat-value m-0" id="totalInstructors">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="glass-card h-100 d-flex flex-column justify-content-between"
+                            style="min-height: 160px;">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-4">
+                                    <div class="stat-icon bg-rose-500/10 text-rose-400">
+                                        <i data-lucide="car" stroke-width="2.5"></i>
+                                    </div>
+                                </div>
+                                <p class="stat-label mb-1">Available Vehicles</p>
+                                <h3 class="stat-value m-0" id="totalVehicles">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-lg-8">
+                        <div class="glass-card h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-5">
+                                <div>
+                                    <h4 class="h5 fw-bold mb-1">Monthly Revenue</h4>
+                                    <p class="text-secondary text-sm mb-0">Revenue performance across all branches.</p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button id="btnWeekly"
+                                        class="btn btn-sm btn-dark px-3 py-2 rounded-3 fw-bold">Weekly</button>
+                                    <button id="btnMonthly"
+                                        class="btn btn-sm btn-outline-secondary px-3 py-2 rounded-3 border-0 text-secondary">Monthly</button>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="height: 480px;">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="glass-card h-100">
+                            <hr class="border-white/10 my-5">
+                            <h5 class="text-xs fw-bold text-secondary text-uppercase mb-4 tracking-widest">Popular
+                                Packages</h5>
+                            <div id="popularPackages" class="d-flex flex-column gap-4 mb-5"></div>
+                            <hr class="border-white/10 my-5">
+                            <h5 class="text-xs fw-bold text-secondary text-uppercase mb-4 tracking-widest">Quick Actions
+                            </h5>
+                            <div class="d-flex flex-column gap-3">
+                                <button
+                                    class="btn btn-transparent text-start p-4 bg-black/5 border border-black/10 rounded-4 hover-glass w-100 d-flex align-items-center gap-4 transition-all hover:-translate-y-1"
+                                    onclick="window.location.href='students.html?action=add'">
+                                    <div
+                                        class="w-12 h-12 bg-indigo-500/10 text-indigo-400 rounded-xl d-flex align-items-center justify-center shadow-lg">
+                                        <i data-lucide="user-plus" size="22"></i>
+                                    </div>
+                                    <div>
+                                        <p class="m-0 fw-bold text-navy">Register Student</p>
+                                        <p class="m-0 text-xs text-secondary mt-1">Add new profile</p>
+                                    </div>
+                                </button>
+                                <button
+                                    class="btn btn-transparent text-start p-4 bg-black/5 border border-black/10 rounded-4 hover-glass w-100 d-flex align-items-center gap-4 transition-all hover:-translate-y-1"
+                                    onclick="window.location.href='instructors.html?action=add'">
+                                    <div
+                                        class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl d-flex align-items-center justify-center shadow-lg">
+                                        <i data-lucide="user-check" size="22"></i>
+                                    </div>
+                                    <div>
+                                        <p class="m-0 fw-bold text-navy">Register Instructor</p>
+                                        <p class="m-0 text-xs text-secondary mt-1">New staff entry</p>
+                                    </div>
+                                </button>
+                                <button
+                                    class="btn btn-transparent text-start p-4 bg-black/5 border border-black/10 rounded-4 hover-glass w-100 d-flex align-items-center gap-4 transition-all hover:-translate-y-1"
+                                    onclick="window.location.href='payments.html?action=add'">
+                                    <div
+                                        class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-xl d-flex align-items-center justify-center shadow-lg">
+                                        <i data-lucide="dollar-sign" size="22"></i>
+                                    </div>
+                                    <div>
+                                        <p class="m-0 fw-bold text-navy">New Payment</p>
+                                        <p class="m-0 text-xs text-secondary mt-1">Record revenue</p>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="h5 fw-bold mb-0">Recent Activity</h4>
+                        <a href="students.html"
+                            class="text-indigo-400 text-sm text-decoration-none fw-bold hover:text-indigo-300">View All
+                            Records <i data-lucide="arrow-right" size="14" class="ms-1"></i></a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table custom-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Student Name</th>
+                                    <th>Module</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentActivityTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof initSidebar === 'function') initSidebar('dashboard');
+
+            try {
+                const role = localStorage.getItem('userRole');
+                const isStudent = role === 'ROLE_STUDENT';
+                const isInstructor = role === 'ROLE_INSTRUCTOR';
+                const userName = localStorage.getItem('userName');
+
+                if (isStudent) {
+                    const adminNode = document.getElementById('adminDashboard');
+                    if (adminNode) adminNode.remove();
+                    const insNode = document.getElementById('instructorDashboard');
+                    if (insNode) insNode.remove();
+                    document.getElementById('studentDashboard').classList.remove('d-none');
+                    document.getElementById('studentWelcome').textContent = `Welcome, ${userName || 'Student'}!`;
+
+                    // Fetch Student Data
+                    const [students, allSchedules] = await Promise.all([api.getStudents(), api.getSchedules()]);
+                    const me = students.find(s => s.fullName === userName);
+
+                    if (me) {
+                        // 1. Progress Stepper Logic
+                        const phases = ['REGISTRATION', 'THEORY_CLASS', 'PRACTICAL_TRAINING', 'TRIAL_EXAM', 'COMPLETED'];
+                        const phaseLabels = ['Enrollment', 'Theory', 'Practical', 'Trial Exam', 'License'];
+                        const currentIdx = phases.indexOf(me.trainingPhase || 'REGISTRATION');
+                        const progressPercent = (currentIdx / (phases.length - 1)) * 100;
+
+                        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+                        document.getElementById('currentPhaseLabel').textContent = `Current Phase: ${phaseLabels[currentIdx]}`;
+
+                        const stepperContainer = document.getElementById('stepperContainer');
+                        stepperContainer.innerHTML = phaseLabels.map((label, idx) => {
+                            const isCompleted = idx < currentIdx;
+                            const isActive = idx === currentIdx;
+                            const isFuture = idx > currentIdx;
+
+                            let bgColor = '#fff';
+                            let borderColor = '#f1f5f9';
+                            let iconColor = '#94a3b8';
+                            let glow = '';
+
+                            if (isCompleted) {
+                                bgColor = '#2563eb';
+                                borderColor = '#dbeafe';
+                                iconColor = '#fff';
+                            } else if (isActive) {
+                                bgColor = '#2563eb';
+                                borderColor = '#dbeafe';
+                                iconColor = '#fff';
+                                glow = 'box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);';
+                            }
+
+                            return `
+                                <div class="d-flex flex-column align-items-center" style="width: 80px; flex-shrink: 0;">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center transition-all" 
+                                         style="width: 40px; height: 40px; background: ${bgColor}; border: 3px solid ${borderColor}; color: ${iconColor}; ${glow} transition: all 0.5s ease; display: flex !important;">
+                                        ${isCompleted ? '<i data-lucide="check" size="16" style="display: block;"></i>' : (isActive ? '<i data-lucide="loader-2" class="spin" size="16" style="display: block;"></i>' : `<span class="fw-bold" style="line-height: 1; font-size: 0.85rem;">${idx + 1}</span>`)}
+                                    </div>
+                                    <p class="text-xs mt-2 mb-0 fw-bold ${!isFuture ? 'text-navy' : 'text-muted'}" style="white-space: nowrap; font-size: 0.7rem;">${label}</p>
+                                </div>
+                            `;
+                        }).join('');
+
+                        // 2. Enrolled Package Info (Flash Card)
+                        const packages = await api.getPackages();
+                        const myPackage = packages.find(p => p.name === me.packageName || p.id === me.packageId);
+
+                        if (myPackage) {
+                            document.getElementById('packageName').textContent = myPackage.name || 'Standard Package';
+                            document.getElementById('packagePrice').textContent = `$${parseFloat(myPackage.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+
+                            const category = myPackage.name.toLowerCase().includes('pro') ? 'PRO COURSE' : 'STANDARD';
+                            document.getElementById('packageCategoryBadge').textContent = category;
+                        }
+
+                        // 3. Upcoming Events Logic (Including Today)
+                        const mySchedules = allSchedules.filter(s => s.studentName === userName);
+                        const now = new Date();
+                        const todayStr = now.toLocaleDateString('en-CA');
+                        const currentTimeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+                        const upcoming = mySchedules.filter(s => {
+                            if (s.scheduleDate > todayStr) return true;
+                            if (s.scheduleDate === todayStr) return s.endTime > currentTimeStr;
+                            return false;
+                        }).sort((a, b) => a.scheduleDate.localeCompare(b.scheduleDate) || a.startTime.localeCompare(b.startTime));
+
+                        const lessonsContainer = document.getElementById('upcomingLessonsContainer');
+                        if (upcoming.length === 0) {
+                            lessonsContainer.innerHTML = `
+                                <div class="glass-card p-5 text-center bg-black/5 border-dashed border-2">
+                                    <i data-lucide="calendar-x" size="48" class="text-slate-300 mb-3"></i>
+                                    <p class="text-secondary fw-bold m-0">No upcoming lessons scheduled.</p>
+                                    <button class="btn btn-sm btn-indigo-400 mt-3 border-0" onclick="window.location.href='schedules.html?action=add'">Book your first session</button>
+                                </div>
+                            `;
+                        } else {
+                            lessonsContainer.innerHTML = upcoming.slice(0, 4).map(s => `
+                                <div class="glass-card p-4 border-0 shadow-sm hover-glass transition-all d-flex align-items-center gap-4 bg-white/40 mb-3">
+                                    <div class="text-center px-4 border-end border-black/5" style="min-width: 100px;">
+                                        <p class="text-xs text-secondary uppercase fw-bold mb-1" style="letter-spacing: 1px;">${new Date(s.scheduleDate).toLocaleDateString('en-US', { month: 'short' })}</p>
+                                        <h3 class="fw-bold m-0 text-navy" style="font-size: 1.5rem;">${new Date(s.scheduleDate).getDate()}</h3>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <h6 class="fw-bold text-navy m-0">${s.scheduleType ? s.scheduleType.replace('_', ' ') : 'PRACTICAL TRAINING'}</h6>
+                                            <span class="badge ${s.scheduleDate === todayStr ? 'bg-rose-500' : 'bg-indigo-500'} text-white px-2 py-0.5 rounded-pill fw-bold" style="font-size: 0.6rem;">
+                                                ${s.scheduleDate === todayStr ? 'TODAY' : 'UPCOMING'}
+                                            </span>
+                                        </div>
+                                        <div class="d-flex gap-4 text-xs text-secondary fw-medium">
+                                            <span class="d-flex align-items-center"><i data-lucide="clock" size="14" class="me-2 text-indigo-400"></i> ${s.startTime} - ${s.endTime}</span>
+                                            <span class="d-flex align-items-center"><i data-lucide="user" size="14" class="me-2 text-indigo-400"></i> ${s.instructorName}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('');
+                        }
+                    }
+                } else if (isInstructor) {
+                    const adminNode = document.getElementById('adminDashboard');
+                    if (adminNode) adminNode.remove();
+                    const stdNode = document.getElementById('studentDashboard');
+                    if (stdNode) stdNode.remove();
+                    document.getElementById('instructorDashboard').classList.remove('d-none');
+                    document.getElementById('instructorWelcome').textContent = `Welcome, ${userName || 'Instructor'}!`;
+
+                    const [allSchedules] = await Promise.all([api.getSchedules()]);
+                    const mySchedules = allSchedules.filter(s => s.instructorName === userName);
+                    const today = new Date().toLocaleDateString('en-CA');
+                    const instructorLessonsContainer = document.getElementById('instructorLessonsContainer');
+                    const next7Days = new Date();
+                    next7Days.setDate(next7Days.getDate() + 7);
+
+                    const upcoming = mySchedules.filter(s => s.scheduleDate >= today && new Date(s.scheduleDate) <= next7Days)
+                        .sort((a, b) => a.scheduleDate.localeCompare(b.scheduleDate) || a.startTime.localeCompare(b.startTime));
+
+                    if (upcoming.length === 0) {
+                        instructorLessonsContainer.innerHTML = `<div class="glass-card p-5 text-center border-dashed"><p class="text-secondary m-0">No assignments for the next 7 days.</p></div>`;
+                    } else {
+                        instructorLessonsContainer.innerHTML = upcoming.map(s => {
+                            const date = new Date(s.scheduleDate);
+                            return `
+                                <div class="glass-card p-4 d-flex align-items-center gap-4 hover-glass mb-3 border-0 bg-white/40 shadow-sm">
+                                    <div class="date-badge text-center px-3" style="min-width: 70px; border-right: 1px solid rgba(0,0,0,0.05);">
+                                        <p class="text-xs text-secondary uppercase fw-bold m-0" style="font-size: 0.65rem;">${date.toLocaleString('default', { month: 'short' })}</p>
+                                        <h3 class="fw-bold m-0 text-navy">${date.getDate()}</h3>
+                                    </div>
+                                    <div class="flex-grow-1 ps-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <h6 class="fw-bold m-0 text-navy">${s.studentName}</h6>
+                                            <span class="badge bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded-pill text-xs fw-bold" style="font-size: 0.65rem;">${formatLabel(s.scheduleType)}</span>
+                                        </div>
+                                        <p class="text-xs text-secondary m-0 d-flex align-items-center gap-2">
+                                            <i data-lucide="clock" size="12"></i> ${s.startTime} - ${s.endTime}
+                                            <span class="mx-1 opacity-20">|</span>
+                                            <i data-lucide="map-pin" size="12"></i> ${s.vehicleRegistration || 'Assigned Vehicle'}
+                                        </p>
+                                    </div>
+                                </div>`;
+                        }).join('');
+                    }
+
+                    document.getElementById('instructorTodayCount').textContent = mySchedules.filter(s => s.scheduleDate === today).length;
+                    document.getElementById('instructorStudentCount').textContent = new Set(mySchedules.map(s => s.studentId)).size;
+
+                    // Instructor's Recent Activity (Past 5 lessons)
+                    const instructorRecentActivity = document.getElementById('instructorRecentActivity');
+                    if (instructorRecentActivity) {
+                        const pastLessons = mySchedules.filter(s => s.scheduleDate <= today).sort((a, b) => b.scheduleDate.localeCompare(a.scheduleDate) || b.endTime.localeCompare(a.endTime)).slice(0, 5);
+                        if (pastLessons.length === 0) {
+                            instructorRecentActivity.innerHTML = `<p class="text-secondary text-sm">No recent activity.</p>`;
+                        } else {
+                            instructorRecentActivity.innerHTML = pastLessons.map(s => `
+                                <div class="d-flex align-items-start gap-3 p-3 rounded-4 bg-black/5 border border-black/5">
+                                    <div class="w-10 h-10 bg-white/50 rounded-circle d-flex align-items-center justify-center flex-shrink-0 shadow-sm">
+                                        <i data-lucide="check-circle" size="18" class="text-emerald-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm fw-bold m-0 text-navy">${s.studentName}</p>
+                                        <p class="text-xs text-secondary m-0">${new Date(s.scheduleDate).toLocaleDateString()} • ${s.scheduleType.replace('_', ' ')}</p>
+                                    </div>
+                                </div>`).join('');
+                        }
+                    }
+
+                } else {
+                    // ADMIN VIEW LOGIC
+                    const studentNode = document.getElementById('studentDashboard');
+                    if (studentNode) studentNode.remove();
+                    const insNode = document.getElementById('instructorDashboard');
+                    if (insNode) insNode.remove();
+
+                    const stats = await api.getDashboardStats();
+                    if (stats) {
+                        document.getElementById('totalStudents').textContent = (stats.totalStudents || 0).toLocaleString();
+                        document.getElementById('totalRevenue').textContent = `$${(stats.totalRevenue || 0).toLocaleString()}`;
+                        document.getElementById('totalInstructors').textContent = stats.totalInstructors || 0;
+                        document.getElementById('totalVehicles').textContent = stats.totalVehicles || 0;
+                    }
+
+                    const [students, packages] = await Promise.all([api.getStudents() || [], api.getPackages() || []]);
+                    const tableBody = document.getElementById('recentActivityTable');
+                    if (tableBody) {
+                        tableBody.innerHTML = '';
+                        students.slice(0, 5).forEach(student => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${new Date(student.enrolledDate).toLocaleDateString()}</td>
+                                <td class="fw-bold">${student.fullName}</td>
+                                <td>${student.packageName || 'General'}</td>
+                                <td><span class="badge-custom badge-success px-3">${student.status}</span></td>
+                                <td class="text-end"><button class="icon-btn text-indigo-400" onclick="window.location.href='students.html'"><i data-lucide="external-link" size="18"></i></button></td>
+                            `;
+                            tableBody.appendChild(tr);
+                        });
+                    }
+
+                    const pkgStats = packages.map(pkg => ({ ...pkg, count: students.filter(s => s.packageId === pkg.id).length }))
+                        .sort((a, b) => b.count - a.count).slice(0, 3);
+                    const pkgContainer = document.getElementById('popularPackages');
+                    if (pkgContainer) {
+                        pkgContainer.innerHTML = pkgStats.map(pkg => `
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1"><span class="text-sm fw-bold">${pkg.name}</span><span class="text-sm text-secondary">${pkg.count} Students</span></div>
+                                <div class="progress bg-black/5" style="height: 6px;"><div class="progress-bar bg-indigo-500" style="width: ${students.length ? (pkg.count / students.length) * 100 : 0}%"></div></div>
+                            </div>
+                        `).join('');
+                    }
+
+                    // Revenue Chart Logic
+                    let revenueChart = null;
+                    const btnWeekly = document.getElementById('btnWeekly');
+                    const btnMonthly = document.getElementById('btnMonthly');
+
+                    async function updateRevenueChart(mode = 'monthly') {
+                        try {
+                            const trends = await api.getRevenueTrends();
+                            const trendData = mode === 'monthly' ? trends.monthly : trends.weekly;
+
+                            const monthOrder = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                            let labels = Object.keys(trendData || {});
+
+                            if (mode === 'monthly') {
+                                labels.sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b));
+                            } else {
+                                labels.sort();
+                            }
+
+                            const data = labels.map(label => trendData[label]);
+
+                            const canvas = document.getElementById('revenueChart');
+                            if (!canvas) return;
+                            const ctx = canvas.getContext('2d');
+                            if (revenueChart) revenueChart.destroy();
+
+                            revenueChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels,
+                                    datasets: [{
+                                        label: 'Revenue ($)',
+                                        data,
+                                        borderColor: '#2563eb',
+                                        tension: 0.4,
+                                        fill: true,
+                                        backgroundColor: 'rgba(37,99,235,0.05)',
+                                        pointBackgroundColor: '#fff',
+                                        pointBorderColor: '#2563eb',
+                                        pointBorderWidth: 2,
+                                        pointRadius: 4,
+                                        pointHoverRadius: 6
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: { display: false },
+                                        tooltip: {
+                                            backgroundColor: '#1e293b',
+                                            titleFont: { size: 14, weight: 'bold' },
+                                            bodyFont: { size: 13 },
+                                            padding: 12,
+                                            cornerRadius: 8,
+                                            displayColors: false,
+                                            callbacks: {
+                                                label: function (context) {
+                                                    return '$' + context.parsed.y.toLocaleString();
+                                                }
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            suggestedMin: 0,
+                                            suggestedMax: 20000,
+                                            ticks: {
+                                                stepSize: 5000,
+                                                font: { size: 11 },
+                                                callback: value => '$' + value.toLocaleString()
+                                            },
+                                            grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false }
+                                        },
+                                        x: {
+                                            grid: { display: false },
+                                            ticks: { font: { size: 11, weight: '500' } }
+                                        }
+                                    }
+                                }
+                            });
+
+                            if (btnMonthly) btnMonthly.className = mode === 'monthly' ? 'btn btn-sm btn-dark px-3 py-2 rounded-3 fw-bold' : 'btn btn-sm btn-outline-secondary px-3 py-2 rounded-3 border-0 text-secondary';
+                            if (btnWeekly) btnWeekly.className = mode === 'weekly' ? 'btn btn-sm btn-dark px-3 py-2 rounded-3 fw-bold' : 'btn btn-sm btn-outline-secondary px-3 py-2 rounded-3 border-0 text-secondary';
+                        } catch (error) {
+                            console.error('Failed to update revenue chart:', error);
+                        }
+                    }
+                    if (btnWeekly) btnWeekly.onclick = () => updateRevenueChart('weekly');
+                    if (btnMonthly) btnMonthly.onclick = () => updateRevenueChart('monthly');
+                    updateRevenueChart('monthly');
+                }
+
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+
+                // Update Live Time
+                function updateClock() {
+                    const now = new Date();
+                    const options = {
+                        weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit', second: '2-digit'
+                    };
+                    const timeStr = now.toLocaleDateString('en-US', options);
+                    const adminClock = document.getElementById('liveDateTime');
+                    const insClock = document.getElementById('instructorClock');
+                    if (adminClock) adminClock.textContent = timeStr;
+                    if (insClock) insClock.textContent = timeStr;
+                }
+                setInterval(updateClock, 1000);
+                updateClock();
+
+            } catch (err) {
+                console.error('Dashboard initialization failed:', err);
+            }
+        });
+    </script>
+</body>
+
+</html>

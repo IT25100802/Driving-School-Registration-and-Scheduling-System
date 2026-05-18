@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveHUB - Instructor Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/api.js"></script>
+    <script src="js/components.js"></script>
+</head>
+
+<body>
+
+    <main class="main-content">
+        <!-- Header will be injected here -->
+
+        <div class="container-fluid p-0">
+            <div class="d-flex justify-content-between align-items-end mb-5">
+                <div>
+                    <h2 class="display-6 fw-bold mb-1 tracking-tight">Instructor Management</h2>
+                    <p class="text-secondary mb-0">Monitor performance metrics and availability across the team.</p>
+                </div>
+                <button class="btn-modern btn-primary-modern" id="addInstructorBtn" data-bs-toggle="modal"
+                    data-bs-target="#addInstructorModal">
+                    <i data-lucide="plus" size="18"></i> Add Instructor
+                </button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="row g-4 mb-5" id="instructorStats">
+                <!-- Data injected here -->
+            </div>
+
+            <div class="glass-card mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="h5 fw-bold mb-0">Instructor Roster</h4>
+                    <div class="search-wrapper" style="max-width: 300px;">
+                        <i data-lucide="search" class="search-icon" size="18"></i>
+                        <input type="text" class="search-input" placeholder="Search instructors..."
+                            id="instructorSearch">
+                    </div>
+                </div>
+                <div id="instructorViewContainer">
+                    <div class="table-responsive" id="instructorTableContainer">
+                        <table class="table custom-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Instructor</th>
+                                    <th>Specialization</th>
+                                    <th class="admin-only">Experience</th>
+                                    <th class="admin-only">Status</th>
+                                    <th class="text-end admin-only">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="instructorTableBody">
+                                <!-- Data injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row g-4" id="instructorGridContainer" style="display: none;">
+                        <!-- Cards injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal... -->
+    <div class="modal fade" id="addInstructorModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 glass-card p-0 shadow-2xl">
+                <div class="modal-header border-white/10 p-5 pb-4">
+                    <div>
+                        <h4 class="modal-title fw-bold display-6 tracking-tight">Add Instructor</h4>
+                        <p class="text-secondary text-sm m-0 mt-1">Register a new instructor to the system.</p>
+                    </div>
+                    <button type="button" class="icon-btn" data-bs-dismiss="modal"><i data-lucide="x"
+                            size="24"></i></button>
+                </div>
+                <form id="addInstructorForm">
+                    <div class="modal-body p-5 pt-4">
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-12">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Full
+                                    Name</label>
+                                <input type="text" class="search-input" id="insFullName"
+                                    placeholder="Enter full name (e.g. John Doe)" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Email</label>
+                                <input type="email" class="search-input" id="insEmail" placeholder="example@email.com"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Phone</label>
+                                <input type="text" class="search-input" id="insPhone" placeholder="+94 77 123 4567"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">NIC
+                                    Number</label>
+                                <input type="text" class="search-input" id="insNic"
+                                    placeholder="987654321V or 199876543210" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">License
+                                    Number</label>
+                                <input type="text" class="search-input" id="insLicenseNumber" placeholder="L12345678"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Specialization</label>
+                                <select class="search-input form-select" id="insSpecialization" required>
+                                    <option value="MOTORCYCLE">Motorcycle</option>
+                                    <option value="LIGHT_VEHICLE">Light Vehicle</option>
+                                    <option value="HEAVY_VEHICLE">Heavy Vehicle</option>
+                                    <option value="BUS">Bus</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Username</label>
+                                <input type="text" class="search-input" id="insUsername" placeholder="e.g. john_d"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Password</label>
+                                <input type="password" class="search-input" id="insPassword" placeholder="••••••••"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Experience
+                                    (Years)</label>
+                                <input type="number" class="search-input" id="insExperience" placeholder="e.g. 5"
+                                    required>
+                            </div>
+                            <div class="col-md-12">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Joined
+                                    Date</label>
+                                <input type="date" class="search-input" id="insJoinedDate" required>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <button type="button" class="btn-modern btn-outline-modern flex-grow-1 py-3"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn-modern btn-primary-modern flex-grow-1 py-3">Register
+                                Instructor</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Instructor Modal -->
+    <div class="modal fade" id="editInstructorModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 glass-card p-0 shadow-2xl">
+                <div class="modal-header border-white/10 p-5 pb-4">
+                    <div>
+                        <h4 class="modal-title fw-bold display-6 tracking-tight">Edit Instructor</h4>
+                        <p class="text-secondary text-sm m-0 mt-1">Update instructor information.</p>
+                    </div>
+                    <button type="button" class="icon-btn" data-bs-dismiss="modal"><i data-lucide="x"
+                            size="24"></i></button>
+                </div>
+                <form id="editInstructorForm">
+                    <input type="hidden" id="editInsId">
+                    <div class="modal-body p-5 pt-4">
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-12">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Full
+                                    Name</label>
+                                <input type="text" class="search-input" id="editInsFullName"
+                                    placeholder="e.g. David Miller" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Email</label>
+                                <input type="email" class="search-input" id="editInsEmail"
+                                    placeholder="example@email.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Phone</label>
+                                <input type="text" class="search-input" id="editInsPhone" placeholder="+94 77 123 4567"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">NIC
+                                    Number</label>
+                                <input type="text" class="search-input" id="editInsNic"
+                                    placeholder="987654321V or 199876543210" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">License
+                                    Number</label>
+                                <input type="text" class="search-input" id="editInsLicenseNumber"
+                                    placeholder="L12345678" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Specialization</label>
+                                <select class="search-input form-select" id="editInsSpecialization" required>
+                                    <option value="MOTORCYCLE">Motorcycle</option>
+                                    <option value="LIGHT_VEHICLE">Light Vehicle</option>
+                                    <option value="HEAVY_VEHICLE">Heavy Vehicle</option>
+                                    <option value="BUS">Bus</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Experience
+                                    (Years)</label>
+                                <input type="number" class="search-input" id="editInsExperience" placeholder="e.g. 5"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Joined
+                                    Date</label>
+                                <input type="date" class="search-input" id="editInsJoinedDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label
+                                    class="form-label text-xs fw-bold text-secondary text-uppercase tracking-widest mb-3">Status</label>
+                                <select class="search-input form-select" id="editInsStatus" required>
+                                    <option value="AVAILABLE">Available</option>
+                                    <option value="ON_LEAVE">On Leave</option>
+                                    <option value="INACTIVE">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-4">
+                            <button type="button" class="btn-modern btn-outline-modern flex-grow-1 py-3"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn-modern btn-primary-modern flex-grow-1 py-3">Save
+                                Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allInstructors = [];
+
+        function formatLabel(str) {
+            if (!str) return '';
+            return str.split('_').map(word =>
+                word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            ).join(' ');
+        }
+
+        async function loadInstructors() {
+            try {
+                const role = localStorage.getItem('userRole');
+                const isStudent = role === 'ROLE_STUDENT';
+
+                if (isStudent) {
+                    document.getElementById('addInstructorBtn').style.display = 'none';
+                    document.getElementById('instructorStats').style.display = 'none';
+                    document.getElementById('instructorTableContainer').style.display = 'none';
+                    document.getElementById('instructorGridContainer').style.display = 'flex';
+                    document.querySelector('h2.display-6').textContent = 'Our Expert Instructors';
+                    document.querySelector('p.text-secondary.mb-0').textContent = 'Meet our professional driving instructors and their specialties.';
+                }
+
+                allInstructors = await api.getInstructors();
+                renderInstructors(allInstructors);
+                renderStats();
+            } catch (error) {
+                console.error('Error loading instructors:', error);
+            }
+        }
+
+        function renderStats() {
+            const statsContainer = document.getElementById('instructorStats');
+            const total = allInstructors.length;
+            const active = allInstructors.filter(i => i.status === 'AVAILABLE' || i.status === 'ACTIVE').length;
+
+            statsContainer.innerHTML = `
+                <div class="col-md-3">
+                    <div class="glass-card">
+                        <div class="d-flex justify-content-between mb-4">
+                            <div>
+                                <p class="stat-label mb-1">Total Instructors</p>
+                                <h3 class="stat-value">${total}</h3>
+                            </div>
+                            <div class="stat-icon bg-indigo-500/10 text-indigo-400"><i data-lucide="users-2"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="glass-card">
+                        <div class="d-flex justify-content-between mb-4">
+                            <div>
+                                <p class="stat-label mb-1">Active Now</p>
+                                <h3 class="stat-value">${active}</h3>
+                            </div>
+                            <div class="stat-icon bg-emerald-500/10 text-emerald-400"><i data-lucide="zap"></i></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function renderInstructors(instructors) {
+            const role = localStorage.getItem('userRole');
+            const isStudent = role === 'ROLE_STUDENT';
+
+            if (isStudent) {
+                const grid = document.getElementById('instructorGridContainer');
+                grid.innerHTML = '';
+                instructors.forEach(ins => {
+                    const initials = ins.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                    const card = `
+                        <div class="col-md-4">
+                            <div class="glass-card h-100 p-4 text-center">
+                                <div class="mx-auto mb-4" style="width: 100px; height: 100px;">
+                                    <div class="w-100 h-100 rounded-circle bg-indigo-500/20 text-indigo-400 d-flex align-items-center justify-content-center shadow-lg border border-white/20">
+                                        <i data-lucide="user" size="48"></i>
+                                    </div>
+                                </div>
+                                <h4 class="h5 fw-bold mb-1">${ins.fullName}</h4>
+                                <p class="text-indigo-400 fw-semibold mb-4">Instructor</p>
+                                
+                                <div class="pt-4 border-top border-black/10 text-start">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="text-xs text-secondary uppercase tracking-wider fw-bold">Specialization</span>
+                                        <span class="text-xs fw-bold text-dark">${formatLabel(ins.specialization)}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-xs text-secondary uppercase tracking-wider fw-bold">Experience</span>
+                                        <span class="text-xs fw-bold text-dark">${ins.yearsOfExperience} Years</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.insertAdjacentHTML('beforeend', card);
+                });
+            } else {
+                const tbody = document.getElementById('instructorTableBody');
+                tbody.innerHTML = '';
+                instructors.forEach(ins => {
+                    const initials = ins.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                    const tr = document.createElement('tr');
+                    tr.className = 'cursor-pointer hover-glass';
+                    tr.onclick = (e) => {
+                        if (!e.target.closest('button')) {
+                            showProfilePreview('instructor', ins);
+                        }
+                    };
+                    tr.innerHTML = `
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 d-flex align-items-center justify-center text-xs fw-bold">${initials}</div>
+                                <div>
+                                    <p class="fw-bold m-0">${ins.fullName}</p>
+                                    <p class="text-xs text-secondary m-0">${ins.email}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge-custom badge-neutral px-3">${formatLabel(ins.specialization)}</span></td>
+                        <td>${ins.yearsOfExperience} Years</td>
+                        <td><span class="badge-custom ${ins.status === 'AVAILABLE' ? 'badge-success' : 'badge-info'} px-3">${ins.status}</span></td>
+                        <td class="text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                                <button class="icon-btn text-indigo-400" onclick="editInstructor('${ins.id}')"><i data-lucide="edit-3" size="16"></i></button>
+                                <button class="icon-btn text-rose-500 hover:text-rose-600" onclick="deleteInstructor('${ins.id}')"><i data-lucide="trash-2" size="16"></i></button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            lucide.createIcons();
+        }
+
+        async function deleteInstructor(id) {
+            if (confirm('Delete this instructor?')) {
+                await api.deleteInstructor(id);
+                loadInstructors();
+            }
+        }
+
+        document.getElementById('addInstructorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                fullName: document.getElementById('insFullName').value,
+                email: document.getElementById('insEmail').value,
+                phone: document.getElementById('insPhone').value,
+                username: document.getElementById('insUsername').value,
+                password: document.getElementById('insPassword').value,
+                nic: document.getElementById('insNic').value,
+                licenseNumber: document.getElementById('insLicenseNumber').value,
+                specialization: document.getElementById('insSpecialization').value,
+                yearsOfExperience: parseInt(document.getElementById('insExperience').value),
+                status: 'AVAILABLE',
+                joinedDate: document.getElementById('insJoinedDate').value || new Date().toISOString().split('T')[0]
+            };
+            await api.createInstructor(data);
+            bootstrap.Modal.getInstance(document.getElementById('addInstructorModal')).hide();
+            e.target.reset();
+            loadInstructors();
+        });
+
+        async function editInstructor(id) {
+            const ins = await api.getInstructorById(id);
+            document.getElementById('editInsId').value = ins.id;
+            document.getElementById('editInsFullName').value = ins.fullName;
+            document.getElementById('editInsEmail').value = ins.email;
+            document.getElementById('editInsPhone').value = ins.phone;
+            document.getElementById('editInsNic').value = ins.nic || '';
+            document.getElementById('editInsLicenseNumber').value = ins.licenseNumber || '';
+            document.getElementById('editInsSpecialization').value = ins.specialization;
+            document.getElementById('editInsExperience').value = ins.yearsOfExperience;
+            document.getElementById('editInsJoinedDate').value = ins.joinedDate || '';
+            document.getElementById('editInsStatus').value = ins.status;
+            new bootstrap.Modal(document.getElementById('editInstructorModal')).show();
+        }
+
+        document.getElementById('editInstructorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editInsId').value;
+            const ins = await api.getInstructorById(id);
+
+            ins.fullName = document.getElementById('editInsFullName').value;
+            ins.email = document.getElementById('editInsEmail').value;
+            ins.phone = document.getElementById('editInsPhone').value;
+            ins.nic = document.getElementById('editInsNic').value;
+            ins.licenseNumber = document.getElementById('editInsLicenseNumber').value;
+            ins.specialization = document.getElementById('editInsSpecialization').value;
+            ins.yearsOfExperience = parseInt(document.getElementById('editInsExperience').value);
+            ins.joinedDate = document.getElementById('editInsJoinedDate').value;
+            ins.status = document.getElementById('editInsStatus').value;
+
+            await api.updateInstructor(id, ins);
+            bootstrap.Modal.getInstance(document.getElementById('editInstructorModal')).hide();
+            loadInstructors();
+        });
+
+        document.getElementById('instructorSearch').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = allInstructors.filter(i => i.fullName.toLowerCase().includes(query) || i.email.toLowerCase().includes(query));
+            renderInstructors(filtered);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSidebar('instructors');
+            loadInstructors();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('action') === 'add') {
+                const modal = new bootstrap.Modal(document.getElementById('addInstructorModal'));
+                modal.show();
+            }
+        });
+    </script>
+</body>
+
+</html>
